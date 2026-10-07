@@ -159,7 +159,7 @@ la justificacion de un ambiente reproducible: [`docs/01_ambiente.md`](docs/01_am
 ## Como descargar los datos
 
 ```bash
-# Descarga todos los meses publicados de los anios configurados (yellow + green)
+# Descarga todos los meses publicados de los anios configurados en ANIOS (yellow + green)
 docker exec lab8-lab python scripts/download_data.py
 
 # Opciones
@@ -176,7 +176,10 @@ docker exec lab8-lab python scripts/verify_data.py --salida docs/inventario_dato
   `Content-Length` del servidor y se registran en `data/raw/manifest.csv`.
 - Los meses que la TLC aun no publica se reportan como `no publicado` y se obtendran
   automaticamente en una ejecucion posterior.
+- Para agregar un anio basta con incluirlo en `ANIOS` dentro de `scripts/download_data.py`
+  (o pasar `--anio`); las vistas y consultas lo incorporan automaticamente.
 - Cambios al script y verificacion de completitud: [`docs/02_descarga.md`](docs/02_descarga.md).
+- Incorporacion de 2024: [`docs/05_incorporacion_2024.md`](docs/05_incorporacion_2024.md).
 
 ## Como ejecutar el analisis
 
