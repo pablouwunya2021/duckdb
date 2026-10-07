@@ -57,7 +57,10 @@ def construir(destino: Path, con_indicadores: bool = True) -> dict:
         for sentencia in sueltas:
             db.execute(sentencia)
         for c in consultas:
-            db.execute(f"CREATE OR REPLACE TABLE {c.nombre} AS {c.sql}")
+            try:
+                db.execute(f"CREATE OR REPLACE TABLE {c.nombre} AS {c.sql}")
+            except duckdb.Error as error:
+                raise RuntimeError(f"error al crear el indicador {c.nombre}: {error}") from error
         tiempos["indicadores_s"] = time.perf_counter() - inicio
 
     filas = db.execute("SELECT count(*) FROM trips").fetchone()[0]

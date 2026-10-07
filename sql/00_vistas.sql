@@ -49,6 +49,7 @@ FROM read_csv('data/raw/reference/taxi_zone_lookup.csv', header = true);
 --   * duration_min: duracion del viaje en minutos
 --   * airport_fee: solo existe en amarillos (NULL en verdes)
 --   * trip_type / ehail_fee: solo existen en verdes (NULL en amarillos)
+--   * request_source: origen de la solicitud (solo desde jun-2026)
 CREATE OR REPLACE VIEW trips AS
 WITH unidos AS (
     SELECT 'yellow' AS taxi_type,
@@ -57,7 +58,7 @@ WITH unidos AS (
            PULocationID, DOLocationID, payment_type,
            fare_amount, extra, mta_tax, tip_amount, tolls_amount, improvement_surcharge,
            total_amount, congestion_surcharge, Airport_fee AS airport_fee, cbd_congestion_fee,
-           CAST(NULL AS BIGINT) AS trip_type, filename
+           CAST(NULL AS BIGINT) AS trip_type, request_source, filename
     FROM yellow_raw
     UNION ALL BY NAME
     SELECT 'green' AS taxi_type,
@@ -66,7 +67,7 @@ WITH unidos AS (
            PULocationID, DOLocationID, payment_type,
            fare_amount, extra, mta_tax, tip_amount, tolls_amount, improvement_surcharge,
            total_amount, congestion_surcharge, CAST(NULL AS DOUBLE) AS airport_fee, cbd_congestion_fee,
-           trip_type, filename
+           trip_type, request_source, filename
     FROM green_raw
 )
 SELECT taxi_type,
@@ -77,7 +78,7 @@ SELECT taxi_type,
        passenger_count, trip_distance, RatecodeID AS ratecode_id, store_and_fwd_flag,
        PULocationID AS pu_location_id, DOLocationID AS do_location_id, payment_type,
        fare_amount, extra, mta_tax, tip_amount, tolls_amount, improvement_surcharge,
-       total_amount, congestion_surcharge, airport_fee, cbd_congestion_fee, trip_type
+       total_amount, congestion_surcharge, airport_fee, cbd_congestion_fee, trip_type, request_source
 FROM unidos;
 
 -- Vista "limpia": aplica las reglas de calidad definidas en el Ejercicio 3.6.
