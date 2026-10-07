@@ -120,19 +120,22 @@ def df_a_markdown(df, max_filas: int = 30) -> str:
         return "_(sin filas)_"
     recorte = df.head(max_filas)
 
-    def fmt(v):
+    sin_miles = {c for c in recorte.columns if any(k in str(c).lower() for k in ("anio", "year", "mes", "hora", "dow"))}
+
+    def fmt(v, col=None):
         if v is None or (isinstance(v, float) and v != v):
             return "NULL"
         if isinstance(v, float):
             return f"{v:,.4f}".rstrip("0").rstrip(".") if abs(v) < 1e15 else f"{v:.3e}"
         if isinstance(v, int):
-            return f"{v:,}"
+            return str(v) if col in sin_miles else f"{v:,}"
         return str(v).replace("|", "\\|").replace("\n", " ")
 
     filas = ["| " + " | ".join(map(str, recorte.columns)) + " |",
              "|" + "|".join("---" for _ in recorte.columns) + "|"]
     for registro in recorte.itertuples(index=False):
-        filas.append("| " + " | ".join(fmt(v.item() if hasattr(v, "item") else v) for v in registro) + " |")
+        filas.append("| " + " | ".join(fmt(v.item() if hasattr(v, "item") else v, col)
+                                      for v, col in zip(registro, recorte.columns)) + " |")
     if len(df) > max_filas:
         filas.append(f"\n_... {len(df) - max_filas} filas mas no mostradas ({len(df)} en total)_")
     return "\n".join(filas)

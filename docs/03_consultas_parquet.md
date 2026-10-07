@@ -2,7 +2,7 @@
 
 - **SQL:** [`sql/03_exploracion.sql`](../sql/03_exploracion.sql) (16 consultas documentadas con `-- objetivo`, `-- fuente`, `-- decision`).
 - **Resultados completos** (SQL + objetivo + fuente + resultado + tiempo + decisión, 3.8):
-  [`docs/resultados/03_exploracion.md`](resultados/03_exploracion.md).
+  [`docs/resultados/03_exploracion_2026.md`](resultados/03_exploracion_2026.md).
 - **Notebook:** [`notebooks/01_exploracion_parquet.ipynb`](../notebooks/01_exploracion_parquet.ipynb).
 - **Reproducir:** `docker exec lab8-lab python scripts/run_sql.py sql/03_exploracion.sql --max-filas 60`
 
