@@ -125,6 +125,8 @@ def df_a_markdown(df, max_filas: int = 30) -> str:
     def fmt(v, col=None):
         if v is None or (isinstance(v, float) and v != v):
             return "NULL"
+        if isinstance(v, bool):
+            return "si" if v else "no"
         if isinstance(v, float):
             return f"{v:,.4f}".rstrip("0").rstrip(".") if abs(v) < 1e15 else f"{v:.3e}"
         if isinstance(v, int):
