@@ -49,7 +49,7 @@ import requests
 
 # Anios que forman parte del conjunto de datos del laboratorio.
 # Para incorporar un anio nuevo basta con agregarlo aqui (o usar --anio).
-ANIOS = (2024, 2026)
+ANIOS = (2024, 2025, 2026)
 TIPOS_TAXI = ("yellow", "green")
 URL_BASE = "https://d37ci6vzurychx.cloudfront.net/trip-data"
 DIR_DESTINO = Path("data/raw")

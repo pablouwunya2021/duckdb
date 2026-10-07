@@ -7,10 +7,12 @@ Generado por `python scripts/verify_data.py --salida docs/inventario_datos.md`.
 | tipo | anio | archivos | meses | filas | tamanio (MiB) |
 |---|---|---:|---|---:|---:|
 | green | 2024 | 12 | 01-12 | 660,218 | 15.2 |
+| green | 2025 | 12 | 01-12 | 591,375 | 13.8 |
 | green | 2026 | 8 | 01-08 | 337,114 | 7.9 |
 | yellow | 2024 | 12 | 01-12 | 41,169,720 | 660.9 |
+| yellow | 2025 | 12 | 01-12 | 48,722,602 | 791.5 |
 | yellow | 2026 | 8 | 01-08 | 29,703,355 | 487.8 |
-| **total** | | **40** | | **71,870,407** | **1,171.7** |
+| **total** | | **64** | | **121,184,384** | **1,977.0** |
 
 ## Detalle por archivo
 
@@ -28,6 +30,18 @@ Generado por `python scripts/verify_data.py --salida docs/inventario_datos.md`.
 | `data/raw/green/2024/green_tripdata_2024-10.parquet` | 56,147 | 1 | 1.3 | si |
 | `data/raw/green/2024/green_tripdata_2024-11.parquet` | 52,222 | 1 | 1.2 | si |
 | `data/raw/green/2024/green_tripdata_2024-12.parquet` | 53,994 | 1 | 1.3 | si |
+| `data/raw/green/2025/green_tripdata_2025-01.parquet` | 48,326 | 1 | 1.1 | si |
+| `data/raw/green/2025/green_tripdata_2025-02.parquet` | 46,621 | 1 | 1.1 | si |
+| `data/raw/green/2025/green_tripdata_2025-03.parquet` | 51,539 | 1 | 1.2 | si |
+| `data/raw/green/2025/green_tripdata_2025-04.parquet` | 52,132 | 1 | 1.2 | si |
+| `data/raw/green/2025/green_tripdata_2025-05.parquet` | 55,399 | 1 | 1.3 | si |
+| `data/raw/green/2025/green_tripdata_2025-06.parquet` | 49,390 | 1 | 1.2 | si |
+| `data/raw/green/2025/green_tripdata_2025-07.parquet` | 48,205 | 1 | 1.1 | si |
+| `data/raw/green/2025/green_tripdata_2025-08.parquet` | 46,306 | 1 | 1.1 | si |
+| `data/raw/green/2025/green_tripdata_2025-09.parquet` | 48,893 | 1 | 1.2 | si |
+| `data/raw/green/2025/green_tripdata_2025-10.parquet` | 49,416 | 1 | 1.1 | si |
+| `data/raw/green/2025/green_tripdata_2025-11.parquet` | 46,912 | 1 | 1.1 | si |
+| `data/raw/green/2025/green_tripdata_2025-12.parquet` | 48,236 | 1 | 1.1 | si |
 | `data/raw/green/2026/green_tripdata_2026-01.parquet` | 40,272 | 1 | 0.9 | si |
 | `data/raw/green/2026/green_tripdata_2026-02.parquet` | 37,373 | 1 | 0.9 | si |
 | `data/raw/green/2026/green_tripdata_2026-03.parquet` | 44,208 | 1 | 1.0 | si |
@@ -48,6 +62,18 @@ Generado por `python scripts/verify_data.py --salida docs/inventario_datos.md`.
 | `data/raw/yellow/2024/yellow_tripdata_2024-10.parquet` | 3,833,771 | 4 | 61.4 | si |
 | `data/raw/yellow/2024/yellow_tripdata_2024-11.parquet` | 3,646,369 | 4 | 57.8 | si |
 | `data/raw/yellow/2024/yellow_tripdata_2024-12.parquet` | 3,668,371 | 4 | 58.7 | si |
+| `data/raw/yellow/2025/yellow_tripdata_2025-01.parquet` | 3,475,226 | 4 | 56.4 | si |
+| `data/raw/yellow/2025/yellow_tripdata_2025-02.parquet` | 3,577,543 | 4 | 57.5 | si |
+| `data/raw/yellow/2025/yellow_tripdata_2025-03.parquet` | 4,145,257 | 4 | 66.7 | si |
+| `data/raw/yellow/2025/yellow_tripdata_2025-04.parquet` | 3,970,553 | 4 | 64.2 | si |
+| `data/raw/yellow/2025/yellow_tripdata_2025-05.parquet` | 4,591,845 | 5 | 74.2 | si |
+| `data/raw/yellow/2025/yellow_tripdata_2025-06.parquet` | 4,322,960 | 5 | 70.1 | si |
+| `data/raw/yellow/2025/yellow_tripdata_2025-07.parquet` | 3,898,963 | 4 | 63.8 | si |
+| `data/raw/yellow/2025/yellow_tripdata_2025-08.parquet` | 3,574,091 | 4 | 59.4 | si |
+| `data/raw/yellow/2025/yellow_tripdata_2025-09.parquet` | 4,251,015 | 5 | 69.1 | si |
+| `data/raw/yellow/2025/yellow_tripdata_2025-10.parquet` | 4,428,699 | 5 | 71.8 | si |
+| `data/raw/yellow/2025/yellow_tripdata_2025-11.parquet` | 4,181,444 | 4 | 67.8 | si |
+| `data/raw/yellow/2025/yellow_tripdata_2025-12.parquet` | 4,305,006 | 5 | 70.3 | si |
 | `data/raw/yellow/2026/yellow_tripdata_2026-01.parquet` | 3,724,889 | 4 | 61.2 | si |
 | `data/raw/yellow/2026/yellow_tripdata_2026-02.parquet` | 3,399,866 | 4 | 56.0 | si |
 | `data/raw/yellow/2026/yellow_tripdata_2026-03.parquet` | 3,952,451 | 4 | 64.7 | si |
