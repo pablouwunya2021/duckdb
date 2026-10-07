@@ -1,6 +1,6 @@
 # Resultados de `sql/07_indicadores.sql`
 
-Generado con `python scripts/run_sql.py sql/07_indicadores.sql` el 2026-10-07 02:19. Origen de datos: archivos Parquet (vistas de `sql/00_vistas.sql`).
+Generado con `python scripts/run_sql.py sql/07_indicadores.sql` el 2026-10-07 02:43. Origen de datos: base `data/processed/taxi.duckdb`.
 
 ## ind_demanda_mensual
 
@@ -20,7 +20,7 @@ GROUP BY ALL
 ORDER BY periodo, taxi_type;
 ```
 
-**Resultado** (64 filas, 0.39 s):
+**Resultado** (64 filas, 1.00 s):
 
 | periodo | anio | mes | taxi_type | viajes | viajes_por_dia | ingresos_usd |
 |---|---|---|---|---|---|---|
@@ -109,7 +109,7 @@ GROUP BY ALL
 ORDER BY periodo, taxi_type;
 ```
 
-**Resultado** (64 filas, 4.25 s):
+**Resultado** (64 filas, 6.93 s):
 
 | periodo | anio | mes | taxi_type | total_promedio_usd | tarifa_promedio_usd | tarifa_mediana_por_milla | distancia_mediana_mi | duracion_mediana_min |
 |---|---|---|---|---|---|---|---|---|
@@ -197,7 +197,7 @@ GROUP BY 1, 2, 3
 ORDER BY taxi_type, tipo_dia, hora;
 ```
 
-**Resultado** (96 filas, 2.00 s):
+**Resultado** (96 filas, 2.88 s):
 
 | taxi_type | tipo_dia | hora | viajes | pct_viajes |
 |---|---|---|---|---|
@@ -317,7 +317,7 @@ GROUP BY ALL
 ORDER BY anio, hora;
 ```
 
-**Resultado** (72 filas, 2.93 s):
+**Resultado** (72 filas, 4.98 s):
 
 | anio | hora | velocidad_mediana_mph | duracion_mediana_min | viajes |
 |---|---|---|---|---|
@@ -413,7 +413,7 @@ GROUP BY 1, 2, 3, 4, 5
 ORDER BY periodo, taxi_type, metodo_pago;
 ```
 
-**Resultado** (256 filas, 0.42 s):
+**Resultado** (256 filas, 0.89 s):
 
 | periodo | anio | mes | taxi_type | metodo_pago | viajes | pct |
 |---|---|---|---|---|---|---|
@@ -694,7 +694,7 @@ GROUP BY ALL
 ORDER BY periodo, taxi_type;
 ```
 
-**Resultado** (64 filas, 1.76 s):
+**Resultado** (64 filas, 1.71 s):
 
 | periodo | anio | mes | taxi_type | viajes_tarjeta | propina_pct_tarifa | pct_con_propina | propina_promedio_usd |
 |---|---|---|---|---|---|---|---|
@@ -789,7 +789,7 @@ FROM a
 ORDER BY anio, taxi_type, segmento;
 ```
 
-**Resultado** (12 filas, 6.61 s):
+**Resultado** (12 filas, 2.32 s):
 
 | anio | taxi_type | segmento | viajes | pct_viajes | pct_ingresos | total_promedio_usd |
 |---|---|---|---|---|---|---|
@@ -824,7 +824,7 @@ GROUP BY 1, 2, 3, 4
 ORDER BY anio, taxi_type, viajes DESC;
 ```
 
-**Resultado** (30 filas, 2.46 s):
+**Resultado** (30 filas, 1.96 s):
 
 | anio | taxi_type | serie | borough | viajes | pct |
 |---|---|---|---|---|---|
@@ -877,7 +877,7 @@ GROUP BY ALL
 ORDER BY periodo, taxi_type;
 ```
 
-**Resultado** (64 filas, 0.55 s):
+**Resultado** (64 filas, 0.78 s):
 
 | periodo | anio | mes | taxi_type | pct_viajes_con_cuota | recaudacion_usd | recargo_congestion_prom |
 |---|---|---|---|---|---|---|
@@ -970,7 +970,7 @@ FROM t JOIN c USING (file_year, file_month, taxi_type)
 ORDER BY periodo, t.taxi_type;
 ```
 
-**Resultado** (64 filas, 2.03 s):
+**Resultado** (64 filas, 1.49 s):
 
 | periodo | anio | mes | taxi_type | registros | validos | pct_validos | pct_sin_datos_taximetro |
 |---|---|---|---|---|---|---|---|
@@ -1062,7 +1062,7 @@ GROUP BY 1, 2, 3, 4, 5
 ORDER BY periodo, t.taxi_type, origen;
 ```
 
-**Resultado** (17 filas, 0.16 s):
+**Resultado** (17 filas, 0.24 s):
 
 | periodo | anio | mes | taxi_type | origen | viajes | pct |
 |---|---|---|---|---|---|---|
@@ -1108,7 +1108,7 @@ GROUP BY ALL
 ORDER BY anio, taxi_type DESC;
 ```
 
-**Resultado** (6 filas, 5.56 s):
+**Resultado** (6 filas, 6.05 s):
 
 | anio | taxi_type | viajes_ene_ago | viajes_por_dia | total_promedio_usd | distancia_mediana_mi | duracion_mediana_min | velocidad_mediana_mph | pct_tarjeta | propina_pct_tarjeta |
 |---|---|---|---|---|---|---|---|---|---|

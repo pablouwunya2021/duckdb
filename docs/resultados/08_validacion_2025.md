@@ -1,6 +1,6 @@
 # Resultados de `sql/08_validacion_2025.sql`
 
-Generado con `python scripts/run_sql.py sql/08_validacion_2025.sql` el 2026-10-07 02:16. Origen de datos: archivos Parquet (vistas de `sql/00_vistas.sql`).
+Generado con `python scripts/run_sql.py sql/08_validacion_2025.sql` el 2026-10-07 02:42. Origen de datos: archivos Parquet (vistas de `sql/00_vistas.sql`).
 
 ## q8_01_archivos_por_anio
 
@@ -80,7 +80,7 @@ GROUP BY taxi_type, file_year
 ORDER BY taxi_type DESC, file_year;
 ```
 
-**Resultado** (6 filas, 0.12 s):
+**Resultado** (6 filas, 0.13 s):
 
 | taxi_type | file_year | m01 | m02 | m03 | m04 | m05 | m06 | m07 | m08 | m09 | m10 | m11 | m12 |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|
@@ -112,7 +112,7 @@ PIVOT s ON anio USING max(archivos) GROUP BY taxi_type, columna
 ORDER BY taxi_type DESC, columna;
 ```
 
-**Resultado** (43 filas, 0.01 s):
+**Resultado** (43 filas, 0.02 s):
 
 | taxi_type | columna | 2024 | 2025 | 2026 |
 |---|---|---|---|---|
@@ -179,7 +179,7 @@ JOIN (SELECT taxi_type, file_year AS anio, count(*) AS registros FROM trips_clea
 ORDER BY t.taxi_type DESC, t.anio;
 ```
 
-**Resultado** (6 filas, 2.58 s):
+**Resultado** (6 filas, 2.03 s):
 
 | taxi_type | anio | registros | registros_limpios | pct_conservado | sin_taximetro_pct |
 |---|---|---|---|---|---|
@@ -215,7 +215,7 @@ GROUP BY ALL
 ORDER BY taxi_type DESC, anio;
 ```
 
-**Resultado** (6 filas, 4.54 s):
+**Resultado** (6 filas, 5.36 s):
 
 | taxi_type | anio | viajes_por_dia | total_prom | tarifa_prom | cbd_prom | distancia_mediana | duracion_mediana | velocidad_mediana | pct_tarjeta | pct_efectivo |
 |---|---|---|---|---|---|---|---|---|---|---|
@@ -254,7 +254,7 @@ GROUP BY ALL
 ORDER BY anio;
 ```
 
-**Resultado** (3 filas, 3.81 s):
+**Resultado** (3 filas, 4.86 s):
 
 | anio | viajes | velocidad_mediana_mph | duracion_mediana_min | distancia_mediana_mi |
 |---|---|---|---|---|
@@ -287,7 +287,7 @@ GROUP BY ALL
 ORDER BY taxi_type DESC, mes;
 ```
 
-**Resultado** (24 filas, 0.11 s):
+**Resultado** (24 filas, 0.13 s):
 
 | taxi_type | mes | v2024 | v2025 | v2026 | var_25_vs_24 | var_26_vs_25 |
 |---|---|---|---|---|---|---|

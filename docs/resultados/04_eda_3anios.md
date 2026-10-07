@@ -1,6 +1,6 @@
 # Resultados de `sql/04_eda.sql`
 
-Generado con `python scripts/run_sql.py sql/04_eda.sql` el 2026-10-07 02:17. Origen de datos: archivos Parquet (vistas de `sql/00_vistas.sql`).
+Generado con `python scripts/run_sql.py sql/04_eda.sql` el 2026-10-07 02:40. Origen de datos: archivos Parquet (vistas de `sql/00_vistas.sql`).
 
 ## q4_01_viajes_por_mes
 
@@ -20,7 +20,7 @@ GROUP BY ALL
 ORDER BY taxi_type, anio, mes;
 ```
 
-**Resultado** (64 filas, 0.39 s):
+**Resultado** (64 filas, 0.38 s):
 
 | taxi_type | anio | mes | viajes | viajes_por_dia | ingresos_musd |
 |---|---|---|---|---|---|
@@ -109,7 +109,7 @@ GROUP BY ALL
 ORDER BY taxi_type, dow, hora;
 ```
 
-**Resultado** (336 filas, 1.93 s):
+**Resultado** (336 filas, 1.98 s):
 
 | taxi_type | dow | hora | viajes_promedio |
 |---|---|---|---|
@@ -472,7 +472,7 @@ GROUP BY ALL
 ORDER BY ALL;
 ```
 
-**Resultado** (4 filas, 1.74 s):
+**Resultado** (4 filas, 1.83 s):
 
 | taxi_type | tipo_dia | hora_pico | pct_hora_pico | hora_valle | pct_hora_valle |
 |---|---|---|---|---|---|
@@ -507,7 +507,7 @@ GROUP BY taxi_type
 ORDER BY taxi_type DESC;
 ```
 
-**Resultado** (2 filas, 15.87 s):
+**Resultado** (2 filas, 18.69 s):
 
 | taxi_type | viajes | distancia_p50_mi | distancia_prom_mi | distancia_p95_mi | duracion_p50_min | duracion_prom_min | duracion_p95_min | velocidad_prom_mph | pasajeros_prom | tarifa_p50 | total_prom |
 |---|---|---|---|---|---|---|---|---|---|---|---|
@@ -533,7 +533,7 @@ GROUP BY hora
 ORDER BY hora;
 ```
 
-**Resultado** (24 filas, 3.91 s):
+**Resultado** (24 filas, 3.57 s):
 
 | hora | velocidad_mediana_mph | duracion_mediana_min | distancia_mediana_mi |
 |---|---|---|---|
@@ -578,7 +578,7 @@ GROUP BY 1, 2
 ORDER BY taxi_type DESC, viajes DESC;
 ```
 
-**Resultado** (22 filas, 0.48 s):
+**Resultado** (22 filas, 0.50 s):
 
 | taxi_type | pasajeros | viajes | pct |
 |---|---|---|---|
@@ -662,7 +662,7 @@ WHERE ranking <= 8
 ORDER BY taxi_type DESC, ranking;
 ```
 
-**Resultado** (16 filas, 2.19 s):
+**Resultado** (16 filas, 2.24 s):
 
 | taxi_type | borough | zone | viajes | pct | ranking |
 |---|---|---|---|---|---|
@@ -708,7 +708,7 @@ GROUP BY taxi_type
 ORDER BY taxi_type DESC;
 ```
 
-**Resultado** (2 filas, 5.02 s):
+**Resultado** (2 filas, 6.11 s):
 
 | taxi_type | tarifa_prom | tarifa_por_milla_mediana | propina_prom | peajes_prom | congestion_prom | cbd_fee_prom | airport_fee_prom | total_prom | pct_tarifa_negociada | pct_despacho |
 |---|---|---|---|---|---|---|---|---|---|---|
@@ -734,7 +734,7 @@ GROUP BY 1, 2, 3, 4
 ORDER BY taxi_type DESC, anio, mes, viajes DESC;
 ```
 
-**Resultado** (320 filas, 0.33 s):
+**Resultado** (320 filas, 0.34 s):
 
 | taxi_type | anio | mes | metodo_pago | viajes | pct |
 |---|---|---|---|---|---|
@@ -1080,7 +1080,7 @@ GROUP BY 1, 2
 ORDER BY taxi_type DESC, viajes DESC;
 ```
 
-**Resultado** (10 filas, 2.10 s):
+**Resultado** (10 filas, 2.32 s):
 
 | taxi_type | metodo_pago | viajes | pct_con_propina | propina_pct_tarifa | propina_prom |
 |---|---|---|---|---|---|
@@ -1117,7 +1117,7 @@ GROUP BY taxi_type
 ORDER BY taxi_type DESC;
 ```
 
-**Resultado** (2 filas, 2.44 s):
+**Resultado** (2 filas, 2.42 s):
 
 | taxi_type | pct_tarifa | pct_propina | pct_peajes | pct_congestion | pct_cbd_fee | pct_aeropuerto | pct_otros |
 |---|---|---|---|---|---|---|---|
@@ -1146,7 +1146,7 @@ GROUP BY 1, 2
 ORDER BY taxi_type DESC, orden;
 ```
 
-**Resultado** (14 filas, 2.09 s):
+**Resultado** (14 filas, 2.10 s):
 
 | taxi_type | rango_millas | orden | viajes | pct |
 |---|---|---|---|---|
@@ -1182,7 +1182,7 @@ GROUP BY 1, 2
 ORDER BY taxi_type DESC, desde_usd;
 ```
 
-**Resultado** (32 filas, 1.84 s):
+**Resultado** (32 filas, 1.82 s):
 
 | taxi_type | desde_usd | viajes | pct |
 |---|---|---|---|
@@ -1250,7 +1250,7 @@ GROUP BY t.taxi_type, q.qd, q.qm, q.qt, q.qf
 ORDER BY t.taxi_type DESC;
 ```
 
-**Resultado** (2 filas, 24.10 s):
+**Resultado** (2 filas, 23.89 s):
 
 | taxi_type | lim_sup_distancia | pct_atip_distancia | lim_sup_duracion | pct_atip_duracion | lim_sup_total | pct_atip_total | lim_sup_usd_milla | pct_atip_usd_milla |
 |---|---|---|---|---|---|---|---|---|
@@ -1282,7 +1282,7 @@ GROUP BY taxi_type
 ORDER BY taxi_type DESC;
 ```
 
-**Resultado** (2 filas, 2.20 s):
+**Resultado** (2 filas, 2.38 s):
 
 | taxi_type | viajes | total_no_cuadra | pct_no_cuadra | efectivo_con_propina_registrada | velocidad_mayor_80mph |
 |---|---|---|---|---|---|
@@ -1312,7 +1312,7 @@ GROUP BY 1, 2
 ORDER BY t.taxi_type DESC, categoria;
 ```
 
-**Resultado** (4 filas, 6.12 s):
+**Resultado** (4 filas, 6.36 s):
 
 | taxi_type | categoria | viajes | pct_viajes | distancia_prom | total_prom | pct_ingresos |
 |---|---|---|---|---|---|---|
@@ -1342,7 +1342,7 @@ GROUP BY 1, 2
 ORDER BY taxi_type DESC, tipo_dia;
 ```
 
-**Resultado** (4 filas, 2.38 s):
+**Resultado** (4 filas, 2.57 s):
 
 | taxi_type | tipo_dia | viajes_por_dia | distancia_prom | duracion_prom | velocidad_prom | propina_pct_tarifa |
 |---|---|---|---|---|---|---|
@@ -1380,7 +1380,7 @@ HAVING count(*) > 1000
 ORDER BY taxi_type DESC, viajes DESC;
 ```
 
-**Resultado** (21 filas, 2.18 s):
+**Resultado** (21 filas, 2.37 s):
 
 | taxi_type | proveedor | pago | viajes | pct_no_cuadra | diferencia_mediana_usd |
 |---|---|---|---|---|---|

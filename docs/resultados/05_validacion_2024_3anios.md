@@ -1,6 +1,6 @@
 # Resultados de `sql/05_validacion_2024.sql`
 
-Generado con `python scripts/run_sql.py sql/05_validacion_2024.sql` el 2026-10-07 02:18. Origen de datos: archivos Parquet (vistas de `sql/00_vistas.sql`).
+Generado con `python scripts/run_sql.py sql/05_validacion_2024.sql` el 2026-10-07 02:42. Origen de datos: archivos Parquet (vistas de `sql/00_vistas.sql`).
 
 ## q5_01_archivos_por_anio
 
@@ -19,7 +19,7 @@ GROUP BY ALL
 ORDER BY ALL;
 ```
 
-**Resultado** (6 filas, 0.33 s):
+**Resultado** (6 filas, 0.34 s):
 
 | taxi_type | anio | archivos | primer_mes | ultimo_mes |
 |---|---|---|---|---|
@@ -87,7 +87,7 @@ PIVOT s ON anio USING max(archivos) GROUP BY taxi_type, columna
 ORDER BY taxi_type DESC, columna;
 ```
 
-**Resultado** (43 filas, 0.01 s):
+**Resultado** (43 filas, 0.02 s):
 
 | taxi_type | columna | 2024 | 2025 | 2026 |
 |---|---|---|---|---|
@@ -151,7 +151,7 @@ GROUP BY taxi_type, file_year
 ORDER BY taxi_type DESC, file_year;
 ```
 
-**Resultado** (6 filas, 0.13 s):
+**Resultado** (6 filas, 0.14 s):
 
 | taxi_type | file_year | m01 | m02 | m03 | m04 | m05 | m06 | m07 | m08 | m09 | m10 | m11 | m12 |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|
@@ -180,7 +180,7 @@ GROUP BY ALL
 ORDER BY taxi_type DESC, anio;
 ```
 
-**Resultado** (6 filas, 0.28 s):
+**Resultado** (6 filas, 0.27 s):
 
 | taxi_type | anio | viajes | pct_cbd_nulo | pct_pasajeros_nulo | pct_pago_desconocido |
 |---|---|---|---|---|---|
@@ -207,7 +207,7 @@ JOIN (SELECT taxi_type, file_year AS anio, count(*) AS registros FROM trips_clea
 ORDER BY t.taxi_type DESC, t.anio;
 ```
 
-**Resultado** (6 filas, 1.90 s):
+**Resultado** (6 filas, 2.11 s):
 
 | taxi_type | anio | registros | registros_limpios | pct_conservado |
 |---|---|---|---|---|
@@ -234,7 +234,7 @@ GROUP BY ALL
 ORDER BY taxi_type DESC, anio;
 ```
 
-**Resultado** (6 filas, 1.90 s):
+**Resultado** (6 filas, 2.01 s):
 
 | taxi_type | anio | primer_pickup | ultimo_pickup | dias_con_viajes |
 |---|---|---|---|---|
@@ -267,7 +267,7 @@ GROUP BY ALL
 ORDER BY taxi_type DESC, anio;
 ```
 
-**Resultado** (6 filas, 2.01 s):
+**Resultado** (6 filas, 2.06 s):
 
 | taxi_type | anio | viajes_ene_ago | viajes_por_dia | distancia_prom | duracion_prom | total_prom | tarifa_prom |
 |---|---|---|---|---|---|---|---|
