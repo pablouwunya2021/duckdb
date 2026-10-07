@@ -25,6 +25,11 @@ CREATE OR REPLACE VIEW green_raw AS
 SELECT *
 FROM read_parquet('data/raw/green/*/*.parquet', union_by_name = true, filename = true);
 
+-- Tabla de referencia de zonas (LocationID -> Borough, Zone, service_zone)
+CREATE OR REPLACE VIEW zones AS
+SELECT LocationID AS location_id, Borough AS borough, Zone AS zone, service_zone
+FROM read_csv('data/raw/reference/taxi_zone_lookup.csv', header = true);
+
 -- Vista unificada y normalizada (amarillos + verdes).
 -- Transformaciones registradas:
 --   * tpep_/lpep_ pickup/dropoff -> pickup_datetime / dropoff_datetime

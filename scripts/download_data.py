@@ -37,6 +37,7 @@ Cambios respecto al script original (Ejercicio 2.6):
   - Se valida el tamanio contra Content-Length (deteccion de descargas truncadas).
   - Un error de red en la peticion HEAD ya no se confunde con "no publicado".
   - Se genera un manifiesto CSV con el inventario de lo descargado.
+  - Se descarga tambien la tabla de zonas (data/raw/reference/taxi_zone_lookup.csv).
 """
 
 import argparse
@@ -53,6 +54,10 @@ TIPOS_TAXI = ("yellow", "green")
 URL_BASE = "https://d37ci6vzurychx.cloudfront.net/trip-data"
 DIR_DESTINO = Path("data/raw")
 MANIFIESTO = DIR_DESTINO / "manifest.csv"
+# Tabla de referencia de zonas de taxi (LocationID -> Borough/Zone), necesaria
+# para traducir PULocationID/DOLocationID en el analisis.
+URL_ZONAS = "https://d37ci6vzurychx.cloudfront.net/misc/taxi_zone_lookup.csv"
+RUTA_ZONAS = DIR_DESTINO / "reference" / "taxi_zone_lookup.csv"
 
 TIEMPO_ESPERA = 60          # segundos por peticion
 INTENTOS = 3                # intentos por archivo antes de darse por vencido
@@ -201,6 +206,19 @@ def descargar(tipo: str, anio: int, verificar: bool, inventario: list) -> dict:
     return resumen
 
 
+def descargar_zonas() -> None:
+    """Descarga la tabla de zonas de la TLC si aun no existe localmente."""
+    if RUTA_ZONAS.exists() and RUTA_ZONAS.stat().st_size > 0:
+        print(f"\nzonas: {RUTA_ZONAS} ya existe, se omite")
+        return
+    publicado, esperado = consultar_servidor(URL_ZONAS)
+    if not publicado:
+        print("\nzonas: tabla de zonas no disponible en el servidor")
+        return
+    escritos = descargar_archivo(URL_ZONAS, RUTA_ZONAS, esperado)
+    print(f"\nzonas: listo ({formato_tamanio(escritos)}) -> {RUTA_ZONAS}")
+
+
 def escribir_manifiesto(inventario: list) -> None:
     """Escribe el inventario en data/raw/manifest.csv (fuera de Git)."""
     MANIFIESTO.parent.mkdir(parents=True, exist_ok=True)
@@ -243,6 +261,11 @@ def main() -> int:
             total["fallidos"] += [f"{tipo} {m}" for m in resumen["fallidos"]]
 
     escribir_manifiesto(inventario)
+    try:
+        descargar_zonas()
+    except requests.RequestException as error:
+        print(f"\nzonas: ERROR: {error}")
+        total["fallidos"].append("taxi_zone_lookup.csv")
 
     print("\n" + "=" * 60)
     print(f"RESUMEN  (anios: {', '.join(map(str, anios))})")
