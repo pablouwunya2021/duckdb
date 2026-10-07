@@ -117,9 +117,44 @@ debe permitir que una persona que no participo en el desarrollo pueda levantar e
 ambiente, descargar los datos, ejecutar el analisis, reproducir los benchmarks y
 generar los resultados principales.
 
+**Fork del equipo:** <https://github.com/pablouwunya2021/duckdb>
+**Integrantes:** Pablo Cabrera (`pablouwunya2021`), Fernando Mendoza (`lfmendoza`)
+
 ## Como levantar el ambiente
 
-<!-- TODO (Ejercicio 1.5) -->
+Requisitos: Docker Desktop (o Docker Engine + Compose v2), Git y ~10 GB libres.
+
+```bash
+# 1. Clonar el fork
+git clone https://github.com/pablouwunya2021/duckdb.git lab8-duckdb
+cd lab8-duckdb
+git remote add upstream https://github.com/menene/duckdb.git   # opcional
+
+# 2. Construir y levantar los servicios en segundo plano
+docker compose up --build -d
+
+# 3. Verificar que ambos servicios esten arriba
+docker compose ps
+curl -s http://127.0.0.1:3000/api/health      # {"status":"ok"} -> Metabase
+curl -s -o /dev/null -w "%{http_code}\n" http://127.0.0.1:8888/api   # 200 -> JupyterLab
+```
+
+| Servicio | URL | Contenido |
+|---|---|---|
+| JupyterLab (`lab8-lab`) | <http://127.0.0.1:8888> | Python 3.11, DuckDB 1.5.5, pandas, pyarrow, matplotlib |
+| Metabase (`lab8-metabase`) | <http://127.0.0.1:3000> | Metabase v0.63.19 + driver DuckDB 1.5.5.0 |
+
+Todos los comandos de las siguientes secciones se ejecutan **dentro del contenedor
+`lab`** (cuyo directorio de trabajo es `/workspace`), por ejemplo:
+
+```bash
+docker exec -it lab8-lab bash        # abrir una terminal dentro del ambiente
+docker exec lab8-lab python scripts/download_data.py   # o ejecutar algo directo
+```
+
+Para detener el ambiente: `docker compose down` (agregar `-v` borra tambien la
+configuracion de Metabase). Detalle del analisis de la estructura, herramientas y
+la justificacion de un ambiente reproducible: [`docs/01_ambiente.md`](docs/01_ambiente.md).
 
 ## Como descargar los datos
 
