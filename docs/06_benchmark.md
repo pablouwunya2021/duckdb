@@ -2,8 +2,9 @@
 
 - **Consultas del benchmark:** [`sql/06_benchmark.sql`](../sql/06_benchmark.sql) (6.3, 6.8)
 - **Script:** [`scripts/benchmark.py`](../scripts/benchmark.py) · **Base materializada:** [`scripts/build_db.py`](../scripts/build_db.py)
-- **Resultados completos:** [`docs/resultados/06_benchmark.md`](resultados/06_benchmark.md) y
-  [`06_benchmark_resultados.csv`](resultados/06_benchmark_resultados.csv)
+- **Resultados completos:** [`docs/resultados/06_benchmark_2024_2026.md`](resultados/06_benchmark_2024_2026.md) y
+  [`06_benchmark_resultados_2024_2026.csv`](resultados/06_benchmark_resultados_2024_2026.csv)
+  (la ejecución final con 3 años está en [`06_benchmark.md`](resultados/06_benchmark.md))
 - **Notebook:** [`notebooks/04_benchmark.ipynb`](../notebooks/04_benchmark.ipynb)
 
 ```bash
@@ -24,7 +25,7 @@ docker exec lab8-lab python scripts/benchmark.py --repeticiones 5  # 6.4 - 6.7
 | Equivalencia (validez) | **El mismo texto SQL** se ejecuta en ambas estrategias; ambas fuentes tienen exactamente las mismas filas y el script compara los resultados: 32/32 combinaciones devolvieron el mismo resultado |
 | 6.5 Medición | Conexión nueva por consulta y estrategia: 1 ejecución "primera" + 5 repeticiones; se reporta la **mediana** (robusta a ruido) y la primera ejecución por separado |
 | 6.6 Escalas | `1_mes` (ene-2026, 3.8 M filas), `1_trimestre` (ene-mar 2026, 11.2 M), `anio_2024` (41.8 M), `todos` (71.9 M) |
-| Ambiente | Contenedor `lab8-lab`, DuckDB 1.5.5, 10 hilos, ~7.6 GB RAM, disco SSD (montaje virtiofs) |
+| Ambiente | Contenedor `lab8-lab`, DuckDB 1.5.5, 10 hilos, ~7.6 GB RAM, disco SSD (montaje virtiofs). En la re-ejecución con 3 años (Ej. 8) se usaron 4 hilos y `memory_limit = 3GB` para ambas estrategias: con 121 M de filas y 10 hilos el contenedor se quedaba sin memoria |
 
 ## 6.7 Resultados
 
@@ -59,8 +60,8 @@ docker exec lab8-lab python scripts/benchmark.py --repeticiones 5  # 6.4 - 6.7
 | anio_2024 | 41.8 M | 6.04 s | 4.44 s | ×1.36 | 3.8 |
 | todos | 71.9 M | 10.80 s | 7.49 s | ×1.44 | 3.0 |
 
-![Tiempos](img/bench_tiempos.png)
-![Speedup](img/bench_speedup.png)
+![Tiempos](img/bench_tiempos_2024_2026.png)
+![Speedup](img/bench_speedup_2024_2026.png)
 
 ## 6.9 Análisis de las diferencias
 
