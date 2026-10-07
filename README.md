@@ -183,12 +183,87 @@ docker exec lab8-lab python scripts/verify_data.py --salida docs/inventario_dato
 
 ## Como ejecutar el analisis
 
-<!-- TODO -->
+Todas las consultas estan en `sql/` y se ejecutan con DuckDB **directamente sobre los Parquet**
+mediante las vistas de [`sql/00_vistas.sql`](sql/00_vistas.sql) (`trips`, `trips_clean`, `zones`).
+Cada consulta tiene un nombre (`-- name:`) y metadatos (`-- objetivo`, `-- fuente`, `-- decision`);
+`scripts/run_sql.py` las ejecuta y genera un reporte Markdown con el SQL, el resultado y el tiempo.
+
+```bash
+docker exec lab8-lab python scripts/run_sql.py sql/03_exploracion.sql   # Ej. 3: exploracion directa de Parquet
+docker exec lab8-lab python scripts/run_sql.py sql/04_eda.sql           # Ej. 4: analisis exploratorio
+docker exec lab8-lab python scripts/run_sql.py sql/05_validacion_2024.sql
+docker exec lab8-lab python scripts/run_sql.py sql/08_validacion_2025.sql
+# reportes en docs/resultados/<archivo>.md
+```
+
+Notebooks (JupyterLab en <http://127.0.0.1:8888>, carpeta `notebooks/`):
+
+| Notebook | Contenido |
+|---|---|
+| `01_exploracion_parquet.ipynb` | Ejercicio 3 (salidas guardadas con datos 2026) |
+| `02_eda.ipynb` | Ejercicio 4 con graficas (salidas guardadas con datos 2026) |
+| `03_incorporacion_anios.ipynb` | Ejercicios 5 y 8: validacion de 2024 y 2025 |
+| `04_benchmark.ipynb` | Ejercicio 6: demo en vivo y analisis de resultados |
+| `05_indicadores_evolucion.ipynb` | Ejercicios 7 y 8: indicadores y evolucion 2024-2026 |
+
+Para re-ejecutar un notebook desde la terminal:
+`docker exec -w /workspace/notebooks lab8-lab jupyter nbconvert --to notebook --execute --inplace 02_eda.ipynb`
 
 ## Como reproducir los benchmarks
 
-<!-- TODO (Ejercicio 6) -->
+```bash
+docker exec lab8-lab python scripts/build_db.py                          # base del proyecto: data/processed/taxi.duckdb
+docker exec lab8-lab python scripts/benchmark.py --repeticiones 5 --limpiar
+```
+
+- Consultas: [`sql/06_benchmark.sql`](sql/06_benchmark.sql) (8 consultas representativas de los Ej. 3-4).
+- Se ejecuta **el mismo SQL** sobre vistas Parquet y sobre una tabla materializada, en 4 escalas
+  (1 mes, 1 trimestre, 1 anio, todos), con 1 ejecucion inicial + N repeticiones, y se verifica que
+  ambas estrategias devuelvan resultados identicos.
+- Salidas: `docs/resultados/06_benchmark.md`, `docs/resultados/06_benchmark_resultados.csv`,
+  `docs/img/bench_*.png`. Opciones: `--hilos 4 --memoria 3GB` (por defecto, evitan quedarse sin memoria
+  con 121 M de filas), `--escalas 1_mes todos`.
+- Analisis: [`docs/06_benchmark.md`](docs/06_benchmark.md).
 
 ## Como generar los resultados principales
 
-<!-- TODO -->
+Todo el flujo (descarga -> verificacion -> reportes -> base + indicadores -> benchmark -> tablero):
+
+```bash
+docker exec lab8-lab sh scripts/run_all.sh            # agregar --sin-benchmark para omitirlo
+docker compose restart metabase                       # Metabase suelta la base anterior
+docker exec lab8-lab python scripts/setup_metabase.py # crea/actualiza el tablero
+```
+
+Tablero (Ejercicio 7): `setup_metabase.py` crea un administrador **local** de Metabase (credenciales
+generadas en `data/processed/metabase_admin.json`, fuera de Git, o tomadas de `MB_EMAIL`/`MB_PASSWORD`),
+la conexion DuckDB de solo lectura a `taxi.duckdb`, una pregunta por indicador y el tablero
+"Taxis NYC - Indicadores"; al final imprime la URL privada y un enlace publico de solo lectura.
+Evidencia: [`docs/dashboard/tablero_final_2024_2025_2026.png`](docs/dashboard/tablero_final_2024_2025_2026.png).
+
+### Documentacion por ejercicio
+
+| Ejercicio | Documento | SQL / codigo |
+|---|---|---|
+| 1. Ambiente | [`docs/01_ambiente.md`](docs/01_ambiente.md) | `Dockerfile`, `docker-compose.yml` |
+| 2. Descarga | [`docs/02_descarga.md`](docs/02_descarga.md), [`docs/inventario_datos.md`](docs/inventario_datos.md) | `scripts/download_data.py`, `scripts/verify_data.py` |
+| 3. Consultas sobre Parquet | [`docs/03_consultas_parquet.md`](docs/03_consultas_parquet.md) | `sql/00_vistas.sql`, `sql/03_exploracion.sql` |
+| 4. EDA | [`docs/04_eda.md`](docs/04_eda.md) | `sql/04_eda.sql` |
+| 5. Incorporacion de 2024 | [`docs/05_incorporacion_2024.md`](docs/05_incorporacion_2024.md) | `sql/05_validacion_2024.sql` |
+| 6. Parquet vs tabla | [`docs/06_benchmark.md`](docs/06_benchmark.md) | `sql/06_benchmark.sql`, `scripts/build_db.py`, `scripts/benchmark.py` |
+| 7. Indicadores y tablero | [`docs/07_indicadores.md`](docs/07_indicadores.md) | `sql/07_indicadores.sql`, `scripts/setup_metabase.py` |
+| 8. 2025 y analisis completo | [`docs/08_analisis_completo.md`](docs/08_analisis_completo.md) | `sql/08_validacion_2025.sql` |
+| 9. Discusion | [`docs/09_discusion.md`](docs/09_discusion.md) | |
+
+### Resultados principales
+
+- **Datos:** 64 archivos Parquet (yellow + green, ene-2024 a ago-2026), 121,184,384 viajes, 1.98 GB.
+- **Calidad:** 89-95% de registros validos por anio; problemas tipicos documentados (fechas fuera de rango,
+  duraciones/distancias imposibles, montos negativos, 26% de viajes amarillos sin datos de taximetro en 2026,
+  diferencias sistematicas de registro entre proveedores).
+- **Benchmark (121 M filas):** la tabla DuckDB es ~1.4x mas rapida en consultas repetidas y ~9x en filtros
+  selectivos, pero cuesta 31.6 s de carga, ocupa 2.1x mas disco y es mas lenta en la primera ejecucion.
+- **Tendencias 2024-2026:** pico de demanda del taxi amarillo en 2025 (+13%) y leve caida en 2026; declive
+  sostenido del taxi verde (-24% en dos anios); la cuota de congestion (2025) se paga en ~72% de los viajes
+  amarillos sin mejora de velocidad en la zona CBD; crecen los viajes por plataformas (Uber/Lyft) y los
+  aeropuertos pierden peso en los ingresos (27.9% -> 21.1%).
