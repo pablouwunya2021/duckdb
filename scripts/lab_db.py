@@ -81,18 +81,32 @@ def leer_sql(ruta: str | Path) -> tuple[list[str], list[Consulta]]:
 
 
 def conectar(db: str | Path | None = None, read_only: bool = False,
-             vistas: bool = True, threads: int | None = None) -> duckdb.DuckDBPyConnection:
-    """Abre una conexion (en memoria por defecto) con el directorio de trabajo en la raiz.
+             vistas: bool = True, threads: int | None = None,
+             archivos: dict[str, list[str]] | None = None) -> duckdb.DuckDBPyConnection:
+    """Abre una conexion con el directorio de trabajo en la raiz del proyecto.
+
+    - Sin `db`: base en memoria con las vistas de sql/00_vistas.sql (lectura de Parquet).
+    - Con `db`: abre esa base (p. ej. la materializada) sin crear vistas sobre Parquet.
+    - `archivos`: {'yellow': [...], 'green': [...]} reemplaza los globs de las vistas
+      por una lista concreta de archivos (lo usa el benchmark para variar el volumen).
 
     Las rutas de las vistas son relativas (data/raw/...), por eso se fija
     file_search_path a la raiz del proyecto.
     """
     con = duckdb.connect(str(db) if db else ":memory:", read_only=read_only)
     con.execute(f"SET file_search_path = '{RAIZ.as_posix()}'")
+    try:
+        con.execute("SET enable_progress_bar = false")
+    except duckdb.Error:  # en Jupyter sin ipywidgets DuckDB no permite cambiarlo
+        pass
     if threads:
         con.execute(f"SET threads = {int(threads)}")
-    if vistas and not read_only:
-        sueltas, _ = leer_sql(VISTAS)
+    if vistas and db is None:
+        texto = VISTAS.read_text()
+        for tipo, lista in (archivos or {}).items():
+            literal = "[" + ", ".join(f"'{a}'" for a in lista) + "]"
+            texto = texto.replace(f"'data/raw/{tipo}/*/*.parquet'", literal)
+        sueltas, _ = parsear_sql(texto)
         for sentencia in sueltas:
             con.execute(sentencia)
     return con

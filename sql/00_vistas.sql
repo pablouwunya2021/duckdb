@@ -15,15 +15,26 @@
 -- (y por lo tanto de que anio/mes publicado) proviene cada registro.
 -- =============================================================================
 
+-- Columnas que no existen en todos los anios (cbd_congestion_fee desde 2025,
+-- request_source desde jun-2026). Se agregan con un SELECT vacio unido por
+-- nombre, para que las vistas funcionen aunque se consulte un subconjunto de
+-- archivos donde ninguna las tenga (p. ej. solo 2024).
+
 -- Taxis amarillos, columnas originales
 CREATE OR REPLACE VIEW yellow_raw AS
 SELECT *
-FROM read_parquet('data/raw/yellow/*/*.parquet', union_by_name = true, filename = true);
+FROM read_parquet('data/raw/yellow/*/*.parquet', union_by_name = true, filename = true)
+UNION ALL BY NAME
+SELECT CAST(NULL AS DOUBLE) AS cbd_congestion_fee, CAST(NULL AS VARCHAR) AS request_source
+WHERE false;
 
 -- Taxis verdes, columnas originales
 CREATE OR REPLACE VIEW green_raw AS
 SELECT *
-FROM read_parquet('data/raw/green/*/*.parquet', union_by_name = true, filename = true);
+FROM read_parquet('data/raw/green/*/*.parquet', union_by_name = true, filename = true)
+UNION ALL BY NAME
+SELECT CAST(NULL AS DOUBLE) AS cbd_congestion_fee, CAST(NULL AS VARCHAR) AS request_source
+WHERE false;
 
 -- Tabla de referencia de zonas (LocationID -> Borough, Zone, service_zone)
 CREATE OR REPLACE VIEW zones AS
