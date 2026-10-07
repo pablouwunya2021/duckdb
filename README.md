@@ -158,7 +158,25 @@ la justificacion de un ambiente reproducible: [`docs/01_ambiente.md`](docs/01_am
 
 ## Como descargar los datos
 
-<!-- TODO (Ejercicios 2.6, 5.1 y 8.1) -->
+```bash
+# Descarga todos los meses publicados de los anios configurados (yellow + green)
+docker exec lab8-lab python scripts/download_data.py
+
+# Opciones
+docker exec lab8-lab python scripts/download_data.py --anio 2026          # un anio
+docker exec lab8-lab python scripts/download_data.py --taxi green         # un tipo
+docker exec lab8-lab python scripts/download_data.py --verificar          # revalidar tamanios vs servidor
+
+# Verificar integridad y completitud (lee metadatos Parquet con DuckDB)
+docker exec lab8-lab python scripts/verify_data.py --salida docs/inventario_datos.md
+```
+
+- Los archivos quedan en `data/raw/<tipo>/<anio>/<tipo>_tripdata_<anio>-<mes>.parquet`.
+- Un archivo existente no se vuelve a descargar; las descargas se validan contra el
+  `Content-Length` del servidor y se registran en `data/raw/manifest.csv`.
+- Los meses que la TLC aun no publica se reportan como `no publicado` y se obtendran
+  automaticamente en una ejecucion posterior.
+- Cambios al script y verificacion de completitud: [`docs/02_descarga.md`](docs/02_descarga.md).
 
 ## Como ejecutar el analisis
 
