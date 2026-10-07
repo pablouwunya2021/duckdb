@@ -33,6 +33,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import pandas as pd
 
+import build_db
 import lab_db
 
 SQL_BENCH = lab_db.DIR_SQL / "06_benchmark.sql"
@@ -75,6 +76,7 @@ def materializar(nombre: str, archivos: pd.DataFrame) -> tuple[Path, float]:
     destino = DIR_BENCH / f"{nombre}.duckdb"
     destino.unlink(missing_ok=True)
     con = lab_db.conectar(archivos=a_dict(archivos))
+    build_db.configurar_memoria(con, "3GB", 4)  # evita exit 137 al materializar 120 M de filas
     definicion_limpia = con.execute(
         "SELECT sql FROM duckdb_views() WHERE view_name = 'trips_clean'").fetchone()[0]
     con.execute(f"ATTACH '{destino.as_posix()}' AS b")
@@ -181,6 +183,8 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Benchmark Parquet vs tabla DuckDB")
     parser.add_argument("--repeticiones", type=int, default=5)
     parser.add_argument("--escalas", nargs="*", help="subconjunto de escalas a ejecutar")
+    parser.add_argument("--memoria", default="3GB", help="memory_limit de DuckDB")
+    parser.add_argument("--hilos", type=int, default=4, help="hilos de DuckDB")
     parser.add_argument("--limpiar", action="store_true", help="borra las bases de benchmark al final")
     args = parser.parse_args()
 
@@ -210,6 +214,9 @@ def main() -> int:
                 # incluye la lectura de metadatos/plan sin cache de DuckDB
                 con = (lab_db.conectar(archivos=a_dict(archivos)) if estrategia == "parquet"
                        else lab_db.conectar(ruta_db, read_only=True))
+                # mismas condiciones para ambas estrategias; con 120 M de filas y
+                # 10 hilos el contenedor se queda sin memoria (ver build_db.py)
+                build_db.configurar_memoria(con, args.memoria, args.hilos)
                 hilos = con.execute("SELECT current_setting('threads')").fetchone()[0]
                 df, primera, tiempos = medir(con, c.sql, args.repeticiones)
                 con.close()
